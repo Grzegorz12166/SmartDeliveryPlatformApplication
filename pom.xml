@@ -17,8 +17,10 @@
 
 	<properties>
 		<java.version>21</java.version>
-		<spring.boot.version>3.3.5</spring.boot.version>
+		<spring.boot.version>3.3.13</spring.boot.version>
 		<spring-cloud.version>2023.0.3</spring-cloud.version>
+		<postgresql.version>42.7.11</postgresql.version>
+		<lombok.version>1.18.34</lombok.version>
 		<maven.compiler.release>${java.version}</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -42,8 +44,24 @@
 				<scope>import</scope>
 			</dependency>
 
+			<dependency>
+				<groupId>org.postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>${postgresql.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>provided</scope>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<pluginManagement>
@@ -61,6 +79,13 @@
 					<version>3.13.0</version>
 					<configuration>
 						<release>${maven.compiler.release}</release>
+						<annotationProcessorPaths>
+							<path>
+								<groupId>org.projectlombok</groupId>
+								<artifactId>lombok</artifactId>
+								<version>${lombok.version}</version>
+							</path>
+						</annotationProcessorPaths>
 					</configuration>
 				</plugin>
 

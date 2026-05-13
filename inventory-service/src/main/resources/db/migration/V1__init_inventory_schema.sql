@@ -1,11 +1,11 @@
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
 CREATE TABLE IF NOT EXISTS product (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY,
     sku VARCHAR(100) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     price NUMERIC(19,2) NOT NULL CHECK (price >= 0),
-    currency VARCHAR(3) NOT NULL
+    currency VARCHAR(3) NOT NULL,
+    active BOOLEAN NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS stock_item (
@@ -14,14 +14,14 @@ CREATE TABLE IF NOT EXISTS stock_item (
 );
 
 CREATE TABLE IF NOT EXISTS stock_reservation (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY,
     order_id UUID NOT NULL UNIQUE,
     status VARCHAR(50) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS stock_reservation_item (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id UUID PRIMARY KEY,
     reservation_id UUID NOT NULL REFERENCES stock_reservation(id) ON DELETE CASCADE,
     product_id UUID NOT NULL REFERENCES product(id),
     quantity INTEGER NOT NULL CHECK (quantity > 0)
