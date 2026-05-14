@@ -7,13 +7,13 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-public record StockReserved(
+public record StockReservedEvent(
         UUID eventId,
         String eventType,
         Instant occurredAt,
         UUID correlationId,
         String source,
-        int version,
+        int eventVersion,
         UUID orderId,
         UUID customerId,
         UUID reservationId,
@@ -29,3 +29,4 @@ public record StockReserved(
     }
 
 }
+
