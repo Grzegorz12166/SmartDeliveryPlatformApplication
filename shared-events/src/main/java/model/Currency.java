@@ -1,7 +1,9 @@
-package com.grzegorzfit.smartdelivery.domain;
+package model;
 
 public enum Currency {
     PLN,
     USD,
     EUR
 }
+
+

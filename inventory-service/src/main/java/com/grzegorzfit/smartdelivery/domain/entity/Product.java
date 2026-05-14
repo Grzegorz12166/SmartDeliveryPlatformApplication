@@ -1,6 +1,6 @@
 package com.grzegorzfit.smartdelivery.domain.entity;
 
-import com.grzegorzfit.smartdelivery.domain.Currency;
+import model.Currency;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
