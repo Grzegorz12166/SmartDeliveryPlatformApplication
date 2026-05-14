@@ -1,14 +1,13 @@
-package events.order;
+package events.payment;
 
 import model.Currency;
 import model.DeliveryAddress;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
-public record OrderCreated(
+public record PaymentCompleted(
         UUID eventId,
         String eventType,
         Instant occurredAt,
@@ -17,18 +16,10 @@ public record OrderCreated(
         int version,
         UUID orderId,
         UUID customerId,
-        List<OrderItem> items,
-        BigDecimal totalAmount,
+        UUID paymentId,
+        BigDecimal amount,
         Currency currency,
         DeliveryAddress deliveryAddress
+
 ) {
-
-    public record OrderItem(
-            UUID productId,
-            int quantity,
-            BigDecimal unitPrice
-    ) {
-    }
-
 }
-

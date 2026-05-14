@@ -1,14 +1,14 @@
 package com.grzegorzfit.smartdelivery.domain.entity;
 
-import model.Currency;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import model.Currency;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -22,13 +22,13 @@ public class Product {
     @Setter(AccessLevel.NONE)
     private UUID id;
 
-    @Column(nullable = false,unique = true,length = 100)
+    @Column(nullable = false, unique = true, length = 100)
     private String sku;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false,precision = 19, scale = 2)
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal price;
 
     @Column(nullable = false, length = 3)
@@ -40,12 +40,12 @@ public class Product {
 
     @Setter(AccessLevel.NONE)
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @PrePersist
     private void productCreated() {
-        if(createdAt == null) {
-            createdAt = LocalDateTime.now();
+        if (createdAt == null) {
+            createdAt = Instant.now();
         }
     }
 
@@ -54,7 +54,7 @@ public class Product {
                    BigDecimal price,
                    Currency currency,
                    boolean active
-                   ) {
+    ) {
         this.sku = sku;
         this.name = name;
         this.price = price;

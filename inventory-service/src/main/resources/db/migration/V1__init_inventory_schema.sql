@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS product (
     price NUMERIC(19,2) NOT NULL CHECK (price >= 0),
     currency VARCHAR(3) NOT NULL,
     active BOOLEAN NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT now()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS stock_item (
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS stock_reservation (
     id UUID PRIMARY KEY,
     order_id UUID NOT NULL UNIQUE,
     status VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT now()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS stock_reservation_item (
@@ -29,5 +29,5 @@ CREATE TABLE IF NOT EXISTS stock_reservation_item (
 
 CREATE TABLE IF NOT EXISTS processed_event (
     id UUID PRIMARY KEY,
-    processed_at TIMESTAMP NOT NULL DEFAULT now()
+    processed_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
