@@ -1,7 +1,6 @@
 package com.grzegorzfit.smartdelivery.domain.repository;
 
 
-import com.grzegorzfit.smartdelivery.domain.entity.Product;
 import com.grzegorzfit.smartdelivery.domain.entity.StockItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,11 +10,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface StockItemRepository extends JpaRepository<StockItem, Product> {
+public interface StockItemRepository extends JpaRepository<StockItem, UUID> {
 
-    Optional<StockItem> findByProduct_Id(UUID productId);
+    Optional<StockItem> findByProductId(UUID productId);
 
-    boolean existsByProduct_Id(UUID productId);
+    boolean existsByProductId(UUID productId);
 
-    List<StockItem> findAllByProduct_IdIn(List<UUID> productIds);
+    List<StockItem> findAllByProductIdIn(List<UUID> productIds);
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "stock_items")
@@ -16,7 +17,12 @@ import java.time.Instant;
 public class StockItem {
 
     @Id
+    @Column(name = "product_id", nullable = false)
+    @Setter(AccessLevel.NONE)
+    private UUID productId;
+
     @OneToOne(optional = false)
+    @MapsId
     @JoinColumn(name = "product_id")
     @Setter(AccessLevel.NONE)
     private Product product;
@@ -36,6 +42,7 @@ public class StockItem {
 
     public StockItem(Product product, int availableQuantity, int reservedQuantity) {
         this.product = product;
+        this.productId = product != null ? product.getId() : null;
         this.availableQuantity = availableQuantity;
         this.reservedQuantity = reservedQuantity;
     }
