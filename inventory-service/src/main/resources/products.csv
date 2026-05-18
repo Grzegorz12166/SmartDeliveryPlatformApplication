@@ -1,0 +1,12 @@
+sku,name,price,currency,active,quantity,reserved
+IPHONE-12-128,iPhone 12 128GB,3499.99,EUR,true,12,2
+IPHONE-13-256,iPhone 13 256GB,4299.99,PLN,true,8,1
+SAMSUNG-A52,Samsung Galaxy A52,1799.99,USD,true,15,3
+PIXEL-6-128,Google Pixel 6 128GB,2999.99,PLN,true,10,2
+ONEPLUS-9-256,OnePlus 9 256GB,2499.99,EUR,true,7,1
+XIAOMI-11-512,Xiaomi 11 512GB,1599.99,PLN,true,20,5
+IPAD-PRO-256,iPad Pro 256GB,5299.99,USD,true,5,0
+GALAXY-TAB-S8,Samsung Galaxy Tab S8,3499.99,EUR,true,6,1
+AIRPODS-PRO,Apple AirPods Pro,899.99,EUR,true,25,10
+SONY-WH1000XM4,Sony WH-1000XM4,799.99,PLN,true,12,2
+
