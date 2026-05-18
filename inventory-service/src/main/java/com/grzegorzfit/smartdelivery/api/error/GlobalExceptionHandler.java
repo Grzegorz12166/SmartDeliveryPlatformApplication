@@ -23,15 +23,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        String message = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                .collect(Collectors.joining("; "));
-
-        if (message.isBlank()) {
-            message = "Validation failed";
-        }
+        String message = buildValidationMessage(ex);
 
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
                 "VALIDATION_ERROR",
@@ -42,9 +34,35 @@ public class GlobalExceptionHandler {
         );
     }
 
+    private static String buildValidationMessage(MethodArgumentNotValidException ex) {
+        String message = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.joining("; "));
+
+        if (message.isBlank()) {
+            message = "Validation failed";
+        }
+        return message;
+    }
+
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<ApiErrorResponse> handleIllegalStateException(IllegalStateException ex) {
+        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
+                "CONFLICT",
+                ex.getMessage());
+        return new ResponseEntity<>(apiErrorResponse, HttpStatus.CONFLICT);
 
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiErrorResponse> handleException() {
+        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
+                "INTERNAL_ERROR",
+                "Unexpected internal error occurred."
+        );
+        return new ResponseEntity<>(apiErrorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
