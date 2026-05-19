@@ -25,7 +25,7 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public ProductResponse getProductById(@PathVariable UUID productId) {
+    public ProductResponse getProductById(@PathVariable("productId") UUID productId) {
         return productService.getProductById(productId);
     }
 
@@ -38,7 +38,7 @@ public class ProductController {
 
     @PostMapping("/{productId}/stock")
     public ResponseEntity<Void> addStock(
-            @PathVariable UUID productId,
+            @PathVariable("productId") UUID productId,
             @Valid @RequestBody AddStockRequest request) {
         productService.addStock(productId, request);
         return ResponseEntity.noContent().build();

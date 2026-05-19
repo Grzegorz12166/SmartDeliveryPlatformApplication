@@ -3,9 +3,12 @@ package com.grzegorzfit.smartdelivery.api.error;
 import com.grzegorzfit.smartdelivery.application.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 
 import java.util.stream.Collectors;
 
@@ -54,6 +57,34 @@ public class GlobalExceptionHandler {
                 ex.getMessage());
         return new ResponseEntity<>(apiErrorResponse, HttpStatus.CONFLICT);
 
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiErrorResponse> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String message = "Invalid value for parameter [%s]".formatted(ex.getName());
+        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
+                "VALIDATION_ERROR",
+                message
+        );
+        return new ResponseEntity<>(apiErrorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
+                "VALIDATION_ERROR",
+                "Request body is missing or invalid"
+        );
+        return new ResponseEntity<>(apiErrorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ApiErrorResponse> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
+        ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
+                "METHOD_NOT_ALLOWED",
+                "HTTP method not supported for this endpoint"
+        );
+        return new ResponseEntity<>(apiErrorResponse, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler(Exception.class)
