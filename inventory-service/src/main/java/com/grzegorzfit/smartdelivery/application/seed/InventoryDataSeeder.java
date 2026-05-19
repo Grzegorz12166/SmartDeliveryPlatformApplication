@@ -10,6 +10,7 @@ import model.Currency;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,7 @@ public class InventoryDataSeeder implements CommandLineRunner{
     private final StockItemRepository stockItemRepository;
 
     @Override
+    @Transactional
     public void run(String... args) {
         if(productRepository.count()>0){
             return;
@@ -35,26 +37,30 @@ public class InventoryDataSeeder implements CommandLineRunner{
     private void seedProductsFromCsv() {
         try {
             ClassPathResource resource = new ClassPathResource("products.csv");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
-            CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader());
+            CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+                    .setHeader()
+                    .setSkipHeaderRecord(true)
+                    .build();
 
-            for (CSVRecord csvRecord : csvParser) {
-                String sku = csvRecord.get("sku");
-                String name = csvRecord.get("name");
-                BigDecimal price = new BigDecimal(csvRecord.get("price"));
-                Currency currency = Currency.valueOf(csvRecord.get("currency"));
-                boolean active = Boolean.parseBoolean(csvRecord.get("active"));
-                int quantity = Integer.parseInt(csvRecord.get("quantity"));
-                int reserved = Integer.parseInt(csvRecord.get("reserved"));
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
+                 CSVParser csvParser = new CSVParser(reader, csvFormat)) {
 
-                Product product = new Product(sku, name, price, currency, active);
-                productRepository.save(product);
+                for (CSVRecord csvRecord : csvParser) {
+                    String sku = csvRecord.get("sku");
+                    String name = csvRecord.get("name");
+                    BigDecimal price = new BigDecimal(csvRecord.get("price"));
+                    Currency currency = Currency.valueOf(csvRecord.get("currency"));
+                    boolean active = Boolean.parseBoolean(csvRecord.get("active"));
+                    int quantity = Integer.parseInt(csvRecord.get("quantity"));
+                    int reserved = Integer.parseInt(csvRecord.get("reserved"));
 
-                StockItem stockItem = new StockItem(product, quantity, reserved);
-                stockItemRepository.save(stockItem);
+                    Product product = new Product(sku, name, price, currency, active);
+                    Product savedProduct = productRepository.save(product);
+
+                    StockItem stockItem = new StockItem(savedProduct, quantity, reserved);
+                    stockItemRepository.save(stockItem);
+                }
             }
-
-            csvParser.close();
         } catch (Exception e) {
             throw new RuntimeException("Error loading products from CSV file", e);
         }

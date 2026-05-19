@@ -35,7 +35,7 @@ public class StockItem {
 
     @Version
     @Column(nullable = false)
-    private int version;
+    private Integer version;
 
     @Column(nullable = false, name = "updated_at")
     private Instant updatedAt;
